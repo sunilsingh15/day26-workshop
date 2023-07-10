@@ -67,4 +67,30 @@ public class BoardGameRepository {
         return template.findOne(query, Document.class, "games"); 
     }
 
+    public Integer getSumofRatingsByID(Integer id) {
+        Criteria criteria = Criteria.where("gid").is(id);
+        Query query = Query.query(criteria);
+
+        List<Document> commentsList = template.find(query, Document.class, "comments");
+        List<Integer> ratingsList = new ArrayList<>();
+
+        for (Document c : commentsList) {
+            ratingsList.add(c.getInteger("rating"));
+        }
+
+        Integer sum = 0;
+
+        for (Integer i : ratingsList) {
+            sum += i;
+        }
+
+        return sum;
+    }
+
+    public long getCommentsCountByID(Integer id) {
+        Criteria criteria = Criteria.where("gid").is(id);
+        Query query = Query.query(criteria);
+        return template.count(query, "comments");
+    }
+
 }

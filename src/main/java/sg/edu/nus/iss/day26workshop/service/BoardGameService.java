@@ -31,4 +31,12 @@ public class BoardGameService {
         return repository.getGameByID(id);
     }
 
+    public Integer getSumofRatingsByID(Integer id) {
+        return repository.getSumofRatingsByID(id);
+    }
+
+    public long getCommentsCountByID(Integer id) {
+        return repository.getCommentsCountByID(id);
+    }
+
 }

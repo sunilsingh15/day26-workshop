@@ -93,12 +93,14 @@ public class BoardGameRESTController {
             return new ResponseEntity<String>(errorJson.toString(), HttpStatus.NOT_FOUND);
         }
 
+        double average = service.getSumofRatingsByID(gameID) / service.getCommentsCountByID(gameID);
+
         JsonObject gameJson = Json.createObjectBuilder()
                                 .add("game_id", game.getInteger("gid"))
                                 .add("name", game.getString("name"))
                                 .add("year", game.getInteger("year"))
                                 .add("ranking", game.getInteger("ranking"))
-                                .add("average", "")
+                                .add("average", average)
                                 .add("users_rated", game.getInteger("users_rated"))
                                 .add("url", game.getString("url"))
                                 .add("thumbnail", game.getString("image"))
