@@ -37,6 +37,24 @@ public class BoardGameRepository {
         return gamesList;
     }
 
+    public List<Game> getAllGamesByRank(Integer limit, Integer offset) {
+        Criteria criteria = Criteria.where("");
+        Query query = Query.query(criteria)
+                .limit(limit)
+                .skip(offset)
+                .with(Sort.by("ranking"));
+
+        List<Document> documents = template.find(query, Document.class, "games");
+        List<Game> gamesList = new ArrayList<>();
+
+        for (Document document : documents) {
+            Game game = new Game(document.getInteger("gid"), document.getString("name"));
+            gamesList.add(game);
+        }
+
+        return gamesList;
+    }
+
     public long getGamesCount() {
         Criteria criteria = Criteria.where("");
         Query query = Query.query(criteria);

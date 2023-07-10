@@ -18,6 +18,10 @@ public class BoardGameService {
         return repository.getAllGames(limit, offset);
     }
 
+    public List<Game> getAllGamesByRank(Integer limit, Integer offset) {
+        return repository.getAllGamesByRank(limit, offset);
+    }
+
     public long getGamesCount() {
         return repository.getGamesCount();
     }
