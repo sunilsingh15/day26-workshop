@@ -2,6 +2,7 @@ package sg.edu.nus.iss.day26workshop.service;
 
 import java.util.List;
 
+import org.bson.Document;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,6 +25,10 @@ public class BoardGameService {
 
     public long getGamesCount() {
         return repository.getGamesCount();
+    }
+
+    public Document getGameByID(Integer id) {
+        return repository.getGameByID(id);
     }
 
 }

@@ -61,4 +61,10 @@ public class BoardGameRepository {
         return template.count(query, Document.class, "games");
     }
 
+    public Document getGameByID(Integer id) {
+        Criteria criteria = Criteria.where("gid").is(id);
+        Query query = Query.query(criteria);
+        return template.findOne(query, Document.class, "games"); 
+    }
+
 }
