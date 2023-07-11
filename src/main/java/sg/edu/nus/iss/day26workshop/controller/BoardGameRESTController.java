@@ -82,32 +82,39 @@ public class BoardGameRESTController {
     }
 
     @GetMapping(path = "/game/{gameID}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<String> gameByID(@PathVariable Integer gameID) {
+    public ResponseEntity<String> gameByID(@PathVariable String gameID) {
+        try {
+            Integer id = Integer.parseInt(gameID);
+            Document game = service.getGameByID(id);
 
-        Document game = service.getGameByID(gameID);
+            if (game == null) {
+                JsonObject errorJson = Json.createObjectBuilder()
+                        .add("error", "No game found with ID: " + id)
+                        .build();
+                return new ResponseEntity<>(errorJson.toString(), HttpStatus.NOT_FOUND);
+            }
 
-        if (game == null) {
+            double average = service.getSumofRatingsByID(id) / service.getCommentsCountByID(id);
+
+            JsonObject gameJson = Json.createObjectBuilder()
+                    .add("game_id", game.getInteger("gid"))
+                    .add("name", game.getString("name"))
+                    .add("year", game.getInteger("year"))
+                    .add("ranking", game.getInteger("ranking"))
+                    .add("average", average)
+                    .add("users_rated", game.getInteger("users_rated"))
+                    .add("url", game.getString("url"))
+                    .add("thumbnail", game.getString("image"))
+                    .add("timestamp", LocalDateTime.now().toString())
+                    .build();
+
+            return new ResponseEntity<>(gameJson.toString(), HttpStatus.OK);
+        } catch (NumberFormatException e) {
             JsonObject errorJson = Json.createObjectBuilder()
-                                    .add("error", "No game found with ID: " + gameID)
-                                    .build();
-            return new ResponseEntity<String>(errorJson.toString(), HttpStatus.NOT_FOUND);
+                    .add("error", "Invalid game ID: " + gameID)
+                    .build();
+            return new ResponseEntity<>(errorJson.toString(), HttpStatus.BAD_REQUEST);
         }
-
-        double average = service.getSumofRatingsByID(gameID) / service.getCommentsCountByID(gameID);
-
-        JsonObject gameJson = Json.createObjectBuilder()
-                                .add("game_id", game.getInteger("gid"))
-                                .add("name", game.getString("name"))
-                                .add("year", game.getInteger("year"))
-                                .add("ranking", game.getInteger("ranking"))
-                                .add("average", average)
-                                .add("users_rated", game.getInteger("users_rated"))
-                                .add("url", game.getString("url"))
-                                .add("thumbnail", game.getString("image"))
-                                .add("timestamp", LocalDateTime.now().toString())
-                                .build();
-
-        return new ResponseEntity<String>(gameJson.toString(), HttpStatus.OK);
     }
 
 }
