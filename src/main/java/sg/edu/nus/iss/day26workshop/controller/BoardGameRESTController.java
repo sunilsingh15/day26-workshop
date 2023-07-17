@@ -1,6 +1,7 @@
 package sg.edu.nus.iss.day26workshop.controller;
 
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 
 import org.bson.Document;
@@ -48,7 +49,7 @@ public class BoardGameRESTController {
                 .add("offset", offset)
                 .add("limit", limit)
                 .add("total", service.getGamesCount())
-                .add("timestamp", LocalDateTime.now().toString())
+                .add("timestamp", new Date().toString())
                 .build();
 
         return new ResponseEntity<>(gamesJson.toString(), HttpStatus.OK);
